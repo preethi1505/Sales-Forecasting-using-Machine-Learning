@@ -1,0 +1,43 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# Step 1: Create Dataset
+data = {
+    'Day': [1,2,3,4,5,6,7,8,9,10],
+    'Sales': [200,220,250,270,300,320,350,370,400,420]
+}
+
+df = pd.DataFrame(data)
+
+# Step 2: Prepare Data
+X = df[['Day']]
+y = df['Sales']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 3: Train Model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Step 4: Predict Test Data
+y_pred = model.predict(X_test)
+print("Predicted Sales (Test Data):", y_pred)
+
+# Step 5: Forecast Future Sales
+future_days = np.array([[11], [12], [13]])
+future_sales = model.predict(future_days)
+
+print("\nFuture Predictions:")
+for day, sale in zip(future_days, future_sales):
+    print(f"Day {day[0]} -> Predicted Sales: {sale:.2f}")
+
+# Step 6: Visualization
+plt.scatter(X, y, label='Actual Sales')
+plt.plot(X, model.predict(X), label='Regression Line')
+plt.xlabel("Day")
+plt.ylabel("Sales")
+plt.legend()
+plt.show()
